@@ -12,6 +12,8 @@ jobs:
       - name: Load and Cache dependencies
         # Vì đây là action ở local nên sẽ hướng đường dẫn tới đó
         uses: ./.github/actions/cached-deps
+        with:
+          caching: 'false'
       - name: Lint code
         run: npm run lint
   test:
@@ -29,7 +31,9 @@ jobs:
         if: failure() && steps.run-tests.outcome == 'failure'
         uses: actions/upload-artifact@v3
         with:
+          # tên artifact
           name: test-report
+          # vị trí của artifact
           path: test.json
   build:
     needs: test
@@ -56,7 +60,9 @@ jobs:
       - name: Get build artifacts
         uses: actions/download-artifact@v3
         with:
+          # chon artifacts muốn download
           name: dist-files
+          # chọn nơi sẽ tải xuống
           path: ./dist
       - name: Output contents
         run: ls
